@@ -33,3 +33,10 @@ Route::apiResource('books', 'BookController');
 
 Route::apiResource('posts', 'BackEnd\PostsController');
 Route::apiResource('videos', 'BackEnd\VideosController');
+Route::apiResource('profiles', 'BackEnd\ProfilesController');
+
+Route::get('profiles/{userId}/view', 'BackEnd\ProfilesController@getProfileOfUserById');
+
+// Route::put('profiles/{userId}/view', 'BackEnd\ProfilesController@getProfileOfUserById');
+
+Route::post('profiles/{userId}/upload_image', 'BackEnd\ProfilesController@uploadProfileImage');

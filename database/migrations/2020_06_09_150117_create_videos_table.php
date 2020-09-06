@@ -19,7 +19,7 @@ class CreateVideosTable extends Migration
             $table->text('desc');
             $table->string('keywords');
             $table->text('link');
-            $table->integer('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
         });
     }

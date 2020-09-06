@@ -70,26 +70,34 @@ class VideosController extends Controller
         return new VideoResource($video);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        //
-    }
+        $video =  Video::find($id);
+        $validator = $request->validate([
+            'title' => 'required',
+            'link' => 'required',
+            'keywords' => 'required'
+        ]);
+        $video->title = $request->title;
+        $video->user_id = auth()->user()->id;
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+        if (!preg_match('/^([a-zA-Z]+,?)+[a-zA-Z]+$/', $request->keywords)) {
+            return response()->json(['msg' => 'only strings separated by comma allowed']);
+        } elseif (!preg_match('/^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/', $request->link)) {
+            return response()->json(['msg' => 'only youtube links are allowed']);
+        } else {
+            $video->keywords = $request->keywords;
+        }
+        $video->desc = $request->desc;
+        $video->link = $request->link;
+        $video->update();
+
+        return new VideoResource($video);
+    }
     public function destroy($id)
     {
-        //
+        $item = Video::find($id);
+        $item->delete();
+        return response()->json(['msg' => 'the post has been deleted']);
     }
 }

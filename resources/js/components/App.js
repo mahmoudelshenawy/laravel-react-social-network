@@ -6,11 +6,14 @@ import Register from "./Auth/Register";
 import Login from "./Auth/Login";
 import Navbar from "./layouts/Navbar";
 import Landing from "./layouts/Landing";
+import TutorialPage from "./views/tutorials/TutorialPage";
+import ProfilePage from "./views/profiles/ProfilePage";
 import Error from "./layouts/Error";
 import PrivateRoute from "./utils/PrivateRoute";
 import Discussion from "./views/discussion/Discussion";
 import FilteredDiscussions from "./views/discussion/sections/FilteredDiscussions";
 import ReplyOnPosts from "./views/discussion/sections/ReplyOnPosts";
+import CreateProfile from "./views/profiles/CreateProfile";
 // Redux
 import { Provider } from "react-redux";
 import store from "./store/store";
@@ -47,6 +50,26 @@ function App() {
                         exact
                         path="/discussions/comments/:postId"
                         component={ReplyOnPosts}
+                    />
+                    <PrivateRoute
+                        exact
+                        path="/tutorials"
+                        component={TutorialPage}
+                    />
+                    <PrivateRoute
+                        exact
+                        path="/:userId/profiles"
+                        component={ProfilePage}
+                    />
+                    <PrivateRoute
+                        exact
+                        path="/:userId/profiles/create_profile"
+                        component={CreateProfile}
+                    />
+                    <PrivateRoute
+                        exact
+                        path="/:userId/profiles/edit_profile&edit=true"
+                        component={CreateProfile}
                     />
                     {/* <Route default component={Error} /> */}
                 </Switch>

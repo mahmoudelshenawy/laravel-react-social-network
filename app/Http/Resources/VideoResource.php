@@ -18,12 +18,13 @@ class VideoResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'created_at' => (string) $this->created_at,
-            'updated_at' => (string) $this->updated_at,
             'user' => $this->user,
             // 'comments' => CommentResource::collection($this->comments),
+            'link' => $this->link,
             'keywords' => $this->keywords,
-            'desc' => $this->desc
+            'desc' => $this->desc,
+            'created_at' => (string) $this->created_at,
+            'updated_at' => (string) $this->updated_at,
         ];
     }
 }

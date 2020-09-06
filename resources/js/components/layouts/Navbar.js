@@ -7,7 +7,8 @@ import {
     FaUserCheck,
     FaSignOutAlt,
     FaGlassCheers,
-    FaCodeBranch
+    FaCodeBranch,
+    FaBuffer
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 const Navbar = ({ isAuth, logout, user }) => {
@@ -17,8 +18,11 @@ const Navbar = ({ isAuth, logout, user }) => {
                 <FaGlassCheers style={{ fontSize: "27px" }} className="" />{" "}
                 Discussions
             </Link>
-            <Link to="/videos" className="nav-link">
-                <DiCode style={{ fontSize: "33px" }} className="" /> Videos
+            <Link to="/tutorials" className="nav-link">
+                <DiCode style={{ fontSize: "33px" }} className="" /> Tutorials
+            </Link>
+            <Link to={`/${user.id}/profiles`} className="nav-link">
+                <FaBuffer style={{ fontSize: "33px" }} className="" /> Profile
             </Link>
             <a href="#!" className="nav-link" onClick={logout}>
                 <FaSignOutAlt style={{ fontSize: "20px" }} className="" />{" "}
