@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { isEmpty } from "../../utils/sweetFunctions";
+import { Redirect } from "react-router-dom";
+import { setAlert } from "../../actions/alert";
 import {
     FaChartLine,
     FaCheck,
@@ -10,7 +12,7 @@ import {
     FaLinkedin
 } from "react-icons/fa";
 import axios from "axios";
-const CreateProfile = ({ user, match }) => {
+const CreateProfile = ({ user, match, setAlert }) => {
     const url = match.url;
     let addSign = url.indexOf("&");
     let editisTrue = addSign !== -1 ? url.substring(addSign) : "";
@@ -19,7 +21,8 @@ const CreateProfile = ({ user, match }) => {
     const [profile, setProfile] = useState({});
     const [loading, setloading] = useState(true);
     const [display, toggleDisplay] = useState(false);
-    const [Image, setImageToSend] = useState("");
+    const [image, setImageToSend] = useState(null);
+    const [redirect, setRedirect] = useState(false);
     const [Edit, setEdit] = useState(false);
     const [formData, setformData] = useState({
         id: "",
@@ -31,7 +34,7 @@ const CreateProfile = ({ user, match }) => {
         years_of_experience: "",
         current_job: "",
         previous_job: "",
-        avatar: [],
+        avatar: null,
         facebook: "",
         twitter: "",
         linkedin: "",
@@ -64,7 +67,25 @@ const CreateProfile = ({ user, match }) => {
 
             if (isEmpty(result.data.data) === false) {
                 setProfile(result.data.data);
-                setformData({ ...formData, ...profile });
+                // setformData({ ...formData, ...profile });
+                setformData({
+                    id: profile.id,
+                    full_name: profile.full_name,
+                    age: profile.age,
+                    contact_number: profile.contact_number,
+                    study: profile.study,
+                    graduation_year: profile.graduation_year,
+                    years_of_experience: profile.years_of_experience,
+                    current_job: profile.current_job,
+                    previous_job: profile.previous_job,
+                    avatar: profile.avatar,
+                    facebook: profile.facebook,
+                    twitter: profile.twitter,
+                    linkedin: profile.linkedin,
+                    experience_language: profile.experience_language,
+                    experience_technology: profile.experience_technology,
+                    portfolio: profile.portfolio
+                });
                 setloading(false);
                 setEdit(true);
             }
@@ -77,42 +98,45 @@ const CreateProfile = ({ user, match }) => {
         if (editIsTrue !== -1) {
             getUserProfile();
         }
-    }, [loading]);
+        if (redirect === true) {
+            window.location.href = `/${userId}/profiles`;
+            // return <Redirect to={`/${userId}/profiles`} />;
+        }
+    }, [loading, redirect]);
     const onChange = e =>
         setformData({ ...formData, [e.target.name]: e.target.value });
 
     const setImage = e => {
-        setformData({
-            ...formData,
-            [e.target.name]: e.target.files
-        });
+        setImageToSend(URL.createObjectURL(e.target.files[0]));
+        setformData({ ...formData, avatar: e.target.files[0] });
     };
 
-    const uploadProfile = async (formData, history, edit = false) => {
+    const uploadProfile = formData => {
         try {
             const config = {
-                // headers: {
-                //     "Content-Type": undefined,
-                //     "Content-Type": "application/json",
-                //     "Content-Type": "multipart/form-data"
-                // },
                 header: {
                     Accept: "application/json",
                     "Content-Type": "multipart/form-data"
                 }
             };
             if (Edit === false) {
-                let res = await axios.post("/api/profiles", formData, config);
-                console.log(res);
-                history.push(`/${userId}/profiles`);
+                axios.post("/api/profiles", formData, config).then(data => {
+                    setRedirect(true);
+                    setAlert(
+                        "your profile has been added successfully",
+                        "success"
+                    );
+                });
             } else if (Edit === true) {
-                let res = await axios.put(
-                    `/api/profiles/${id}`,
-                    formData,
-                    config
-                );
-                console.log(res);
-                // history.push(`/${userId}/profiles`);
+                axios
+                    .put(`/api/profiles/${id}`, formData, config)
+                    .then(data => {
+                        setRedirect(true);
+                        setAlert(
+                            "your profile has been updated successfully",
+                            "success"
+                        );
+                    });
             }
         } catch (error) {
             console.error(error);
@@ -121,7 +145,7 @@ const CreateProfile = ({ user, match }) => {
 
     const onSubmit = e => {
         e.preventDefault();
-        uploadProfile(formData, history);
+        uploadProfile(formData);
     };
     return (
         <>
@@ -142,7 +166,7 @@ const CreateProfile = ({ user, match }) => {
                     <div className="row">
                         <div className="col-10 mx-auto">
                             <form
-                                onSubmit={e => onSubmit(e)}
+                                onSubmit={onSubmit}
                                 encType="multipart/form-data"
                             >
                                 <div className="row">
@@ -392,7 +416,7 @@ const CreateProfile = ({ user, match }) => {
                                     </>
                                 )}
                                 <div className="avatar-card">
-                                    <div className="input-group my-2 py-1 text-center">
+                                    {/* <div className="input-group my-2 py-1 text-center">
                                         <div className="input-group-prepend  ">
                                             <span
                                                 className="input-group-text"
@@ -401,9 +425,9 @@ const CreateProfile = ({ user, match }) => {
                                                 Add Profile
                                             </span>
                                         </div>
-                                    </div>
-                                    <div className="add-avatar">
-                                        <div className="custom-file py-1 avatar-input">
+                                    </div> */}
+                                    <div className="my-4 row">
+                                        <div className="custom-file py-1 col-md-6">
                                             <input
                                                 type="file"
                                                 name="avatar"
@@ -418,6 +442,16 @@ const CreateProfile = ({ user, match }) => {
                                             >
                                                 Choose Image
                                             </label>
+                                        </div>
+                                        <div className="col-md-6 d-flex align-self-center">
+                                            <img
+                                                src={image}
+                                                style={{
+                                                    maxWidth: "500px",
+                                                    maxHeight: "200px",
+                                                    marginTop: "-70px"
+                                                }}
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -438,4 +472,4 @@ const CreateProfile = ({ user, match }) => {
 const mapstateToProps = state => ({
     user: state.auth.user
 });
-export default connect(mapstateToProps)(CreateProfile);
+export default connect(mapstateToProps, { setAlert })(CreateProfile);

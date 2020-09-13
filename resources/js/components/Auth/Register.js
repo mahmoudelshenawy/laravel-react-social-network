@@ -33,7 +33,7 @@ const Register = ({ register, isAuth }) => {
     };
     // redirect if registered
     if (isAuth) {
-        return <Redirect to="/discussions" />;
+        return <Redirect to="/login" />;
     }
     return (
         <section className="signup-section">

@@ -23,7 +23,7 @@ const Login = ({ login, isAuth }) => {
     };
     // redirect if logged in
     if (isAuth) {
-        return <Redirect to="/discussions" />;
+        return <Redirect to="/dashboard" />;
     }
     return (
         <section className="signup-section">

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { FaChartLine, FaCheck } from "react-icons/fa";
 import axios from "axios";
 import ProfileCard from "./ProfileCard";
+import Alert from "../../layouts/Alert";
 
 const isEmpty = obj => {
     for (var key in obj) {
@@ -18,14 +19,19 @@ const ProfilePage = ({ match }) => {
         try {
             const result = await axios.get(`/api/profiles/${userId}/view`);
             !isEmpty(result.data.data) && setProfile(result.data.data);
-            setloading(false);
+            !isEmpty(result.data.data) && setloading(false);
         } catch (error) {
             console.log(error);
         }
     };
+
+    const removeProfile = () => {
+        setloading(true);
+        setProfile({});
+    };
     useEffect(() => {
         getUserProfile();
-    }, []);
+    }, [loading, profile]);
     return (
         <>
             <div className="hacks-section">
@@ -38,7 +44,7 @@ const ProfilePage = ({ match }) => {
                         show your skill set for recruiters to hire you
                     </p>
                     <br />
-
+                    <Alert />
                     <br />
                     <div className="row my-4">
                         {loading === false && isEmpty(profile) === false ? (
@@ -46,6 +52,7 @@ const ProfilePage = ({ match }) => {
                                 <ProfileCard
                                     profile={profile}
                                     userId={userId}
+                                    removeProfile={removeProfile}
                                 />
                             </>
                         ) : (

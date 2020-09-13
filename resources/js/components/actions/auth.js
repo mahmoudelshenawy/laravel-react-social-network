@@ -23,14 +23,11 @@ export const loadUser = () => async dispatch => {
     }
     try {
         const response = await axios.get("/api/user", config);
-        console.log(response);
         if (!response.data.email) {
-            console.log("null");
             return dispatch({
                 type: AUTH_ERROR
             });
         } else {
-            // console.log("null");
             return dispatch({
                 type: USER_LOADED,
                 payload: response.data
@@ -53,7 +50,6 @@ export const register = ({ name, email, password }) => dispatch => {
     axios
         .post("/api/register", body, config)
         .then(data => {
-            console.log(data);
             dispatch({
                 type: SIGNUP_DONE,
                 payload: data
@@ -61,7 +57,6 @@ export const register = ({ name, email, password }) => dispatch => {
             dispatch(loadUser());
         })
         .catch(er => {
-            console.log(er);
             dispatch(setAlert("internal server error", "danger"));
             dispatch({
                 type: SIGNUP_FAIL
@@ -78,12 +73,13 @@ export const login = ({ email, password }) => async dispatch => {
     const body = JSON.stringify({ email, password });
     try {
         const response = await axios.post("/api/login", body, config);
-        // console.log( response.data);
+
         dispatch({
             type: LOGIN_DONE,
             payload: response.data
         });
         dispatch(loadUser());
+        location.reload();
     } catch (error) {
         const errors = error.response;
         if (errors.status === 401) {
@@ -91,7 +87,6 @@ export const login = ({ email, password }) => async dispatch => {
         } else if (errors.status === 500) {
             dispatch(setAlert("internal server error", "danger"));
         }
-        // console.log("errors of login", errors);
 
         dispatch({
             type: LOGIN_FAIL

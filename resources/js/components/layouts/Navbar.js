@@ -24,6 +24,9 @@ const Navbar = ({ isAuth, logout, user }) => {
             <Link to={`/${user.id}/profiles`} className="nav-link">
                 <FaBuffer style={{ fontSize: "33px" }} className="" /> Profile
             </Link>
+            <Link to="/developers" className="nav-link">
+                <DiCode style={{ fontSize: "33px" }} className="" /> Developers
+            </Link>
             <a href="#!" className="nav-link" onClick={logout}>
                 <FaSignOutAlt style={{ fontSize: "20px" }} className="" />{" "}
                 Logout

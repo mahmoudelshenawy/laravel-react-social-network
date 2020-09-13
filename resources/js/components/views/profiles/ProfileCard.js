@@ -1,8 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import axios from "axios";
 const ProfileCard = props => {
     const {
+        id,
         full_name,
         age,
         contact_number,
@@ -20,8 +22,15 @@ const ProfileCard = props => {
         portfolio
     } = props.profile;
     const { userId } = props;
+    const removeProfile = props.removeProfile;
     const skillsArr = experience_language.split(",");
     const techsArr = experience_technology.split(",");
+    const deleteProfileOnClick = (e, id) => {
+        e.preventDefault();
+        axios.delete(`/api/profiles/${id}`).then(data => {
+            if (data.data.success === true) removeProfile();
+        });
+    };
     return (
         <>
             <div className="row">
@@ -164,20 +173,21 @@ const ProfileCard = props => {
                                         role="tabpanel"
                                         aria-labelledby="skills-tab"
                                     >
-                                        {/* current_job, previous_job, */}
-                                        <h3>
-                                            programming language :{" "}
-                                            {skillsArr.map(item => (
-                                                <li key={item}>{item}</li>
-                                            ))}
-                                        </h3>
+                                        <div>
+                                            <h3>
+                                                programming language :{" "}
+                                                {skillsArr.map(item => (
+                                                    <li key={item}>{item}</li>
+                                                ))}
+                                            </h3>
 
-                                        <h3>
-                                            other technologies :{" "}
-                                            {techsArr.map(item => (
-                                                <li key={item}>{item}</li>
-                                            ))}
-                                        </h3>
+                                            <h3>
+                                                other technologies :{" "}
+                                                {techsArr.map(item => (
+                                                    <li key={item}>{item}</li>
+                                                ))}
+                                            </h3>
+                                        </div>
                                     </div>
                                     <div
                                         className="tab-pane fade"
@@ -208,6 +218,9 @@ const ProfileCard = props => {
                                             <Link
                                                 to="#"
                                                 className="delete-action"
+                                                onClick={e =>
+                                                    deleteProfileOnClick(e, id)
+                                                }
                                             >
                                                 Delete Profile
                                             </Link>

@@ -14,6 +14,8 @@ import Discussion from "./views/discussion/Discussion";
 import FilteredDiscussions from "./views/discussion/sections/FilteredDiscussions";
 import ReplyOnPosts from "./views/discussion/sections/ReplyOnPosts";
 import CreateProfile from "./views/profiles/CreateProfile";
+import Developers from "./views/developers/Developers";
+import Dashboard from "./views/dashboard/Dashboard";
 // Redux
 import { Provider } from "react-redux";
 import store from "./store/store";
@@ -36,6 +38,11 @@ function App() {
                     <Route exact path="/" component={Landing} />
                     <Route exact exact path="/register" component={Register} />
                     <Route exact path="/login" component={Login} />
+                    <PrivateRoute
+                        exact
+                        path="/dashboard"
+                        component={Dashboard}
+                    />
                     <PrivateRoute
                         exact
                         path="/discussions"
@@ -71,6 +78,12 @@ function App() {
                         path="/:userId/profiles/edit_profile&edit=true"
                         component={CreateProfile}
                     />
+                    <PrivateRoute
+                        exact
+                        path="/developers"
+                        component={Developers}
+                    />
+                    {/* <Route exact path="/developers" component={Developers} /> */}
                     {/* <Route default component={Error} /> */}
                 </Switch>
             </BrowserRouter>
