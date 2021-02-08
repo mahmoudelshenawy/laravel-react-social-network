@@ -23,9 +23,9 @@ import { loadUser } from "./actions/auth";
 import setAuthToken from "./utils/setAuth";
 import Axios from "axios";
 
-if (localStorage.token) {
-    setAuthToken(localStorage.token);
-}
+// if (localStorage.token) {
+//     setAuthToken(localStorage.token);
+// }
 function App() {
     useEffect(() => {
         store.dispatch(loadUser());

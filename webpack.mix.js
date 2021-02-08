@@ -13,7 +13,8 @@ let tailwindcss = require("tailwindcss");
 
 mix.react("resources/js/app.js", "public/js")
     .sass("resources/sass/app.scss", "public/css")
-    .postCss("resources/css/main.css", "public/css", [
-        tailwindcss("./tailwind.js")
-    ])
     .browserSync("http://127.0.0.1:8000");
+
+    // .postCss("resources/css/main.css", "public/css", [
+    //     tailwindcss("./tailwind.js")
+    // ])

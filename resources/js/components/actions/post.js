@@ -2,17 +2,17 @@ import axios from "axios";
 
 export const loadAllPosts = async () => {
     try {
-        // let config;
-        // if (localStorage.token) {
-        //     // setAuthToken(localStorage.token);
-        //     config = {
-        //         headers: {
-        //             Authorization: `Bearer ${localStorage.token}`
-        //         }
-        //     };
-        // }
+        let config;
+        if (localStorage.token) {
+            setAuthToken(localStorage.token);
+            config = {
+                headers: {
+                    Authorization: `Bearer ${localStorage.token}`
+                }
+            };
+        }
 
-        const result = await axios.get("/api/posts");
+        const result = await axios.get("/api/posts" , config);
         const data = result.data.data;
         return data;
     } catch (error) {

@@ -15,12 +15,13 @@ use App\Http\Resources\CommentResource;
 
 class PostsController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:api')->except(['index', 'show', 'getAllComments']);
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth:api')->except(['index', 'show', 'getAllComments']);
+    // }
     public function index()
     {
+
         return PostResource::collection(Post::with('comments', 'likes', 'dislikes', 'tags')->latest()->paginate(25));
     }
 
@@ -241,8 +242,7 @@ class PostsController extends Controller
         $posts_ids = [];
         // return $tags;
         for ($i = 0; $i < count($tags); $i++) {
-            array_push($posts_ids, $tags[$i]{
-                'post_id'});
+            array_push($posts_ids, $tags[$i]['post_id']);
         }
         // return $posts_ids;
         $posts = Post::findOrfail($posts_ids);

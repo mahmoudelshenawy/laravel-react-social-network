@@ -5,17 +5,33 @@ import Form from "./sections/Form";
 import axios from "axios";
 import { loadAllPosts } from "../../actions/post";
 import SinglePost from "./sections/SinglePost";
+import setAuthToken from '../../utils/setAuth'
 const Discussion = () => {
     const [Posts, setPosts] = useState([]);
     const [Loading, setLoading] = useState(true);
-    useEffect(() => {
-        async function fetchData() {
-            const result = await loadAllPosts();
-            await setPosts(result);
-            setLoading(false);
+
+   const loadAllPosts = async () => {
+        try {
+            const result = await axios.get("/api/posts" );
+            const data = await result.data.data;
+            console.log('data of posts' , data)
+            await setPosts(data);
+        } catch (error) {
+            console.log(error);
         }
-        fetchData();
-    }, []);
+    };
+
+
+
+    // async function fetchData() {
+    //     const result = await loadAllPosts();
+    //     await setPosts(result);
+    //     setLoading(false);
+    // }
+
+    useEffect(() => {
+       loadAllPosts();
+    },[]);
 
     const arraymove = (arr, fromIndex, toIndex) => {
         let element = arr[fromIndex];
@@ -67,9 +83,9 @@ const Discussion = () => {
                     </p>
                     <Form addNewPostToCollection={addNewPostToCollection} />
                     <div className="hacks mt-4">
-                        {Posts.length}
+                        {/* {Posts.length} */}
 
-                        {Posts.length > 0 && !Loading ? (
+                        {Posts.length > 0 ? (
                             Posts.map((post, index) => (
                                 <SinglePost
                                     key={index}
@@ -77,7 +93,7 @@ const Discussion = () => {
                                     changeLikesOfPost={changeLikesOfPost}
                                     removePostFromState={removePostFromState}
                                 />
-                                // console.log(post);
+                                
                             ))
                         ) : (
                             <h1>there is no post to show...</h1>

@@ -42,6 +42,7 @@ const Form = ({ addNewPostToCollection, setAlert }) => {
         try {
             const result = await axios.post("/api/posts", formData, config);
             const data = await result.data;
+            console.log(data);
             return data;
         } catch (error) {
             console.log(error);

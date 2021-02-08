@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 // Auth::routes();
 
-Route::get('/home', function () {
-    return 123;
-});
+// Route::get('/home', function () {
+//     return 123;
+// });
 Route::view('/{path?}', 'app')->where('path', '.*');
